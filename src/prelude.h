@@ -1,3 +1,15 @@
+#pragma once
+
+#include <assert.h>
+#include <inttypes.h>
+#include <math.h>
+#include <stdbool.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdnoreturn.h>
+#include <string.h>
+
 #ifdef NDEBUG
 #define ASSERT(X) do { (void) sizeof(X); } while (0)
 #else
@@ -32,49 +44,49 @@ static_assert(sizeof(U32) == 4);
 static_assert(sizeof(U64) == 8);
 static_assert(sizeof(U128) == 16);
 
-static inline F32 PEEK_F32(unsigned char * p) {
+static inline F32 PEEK_F32(char * p) {
   F32 x;
   memcpy(&x, p, sizeof(F32));
   return x;
 }
 
-static inline F64 PEEK_F64(unsigned char * p) {
+static inline F64 PEEK_F64(char * p) {
   F64 x;
   memcpy(&x, p, sizeof(F64));
   return x;
 }
 
-static inline U16 PEEK_U16(unsigned char * p) {
+static inline U16 PEEK_U16(char * p) {
   U16 x;
   memcpy(&x, p, sizeof(U16));
   return x;
 }
 
-static inline U32 PEEK_U32(unsigned char * p) {
+static inline U32 PEEK_U32(char * p) {
   U32 x;
   memcpy(&x, p, sizeof(U32));
   return x;
 }
 
-static inline U64 PEEK_U64(unsigned char * p) {
+static inline U64 PEEK_U64(char * p) {
   U64 x;
   memcpy(&x, p, sizeof(U64));
   return x;
 }
 
-static inline S16 PEEK_S16(unsigned char * p) {
+static inline S16 PEEK_S16(char * p) {
   S16 x;
   memcpy(&x, p, sizeof(S16));
   return x;
 }
 
-static inline S32 PEEK_S32(unsigned char * p) {
+static inline S32 PEEK_S32(char * p) {
   S32 x;
   memcpy(&x, p, sizeof(S32));
   return x;
 }
 
-static inline S64 PEEK_S64(unsigned char * p) {
+static inline S64 PEEK_S64(char * p) {
   S64 x;
   memcpy(&x, p, sizeof(S64));
   return x;
@@ -84,22 +96,38 @@ static inline S64 PEEK_S64(unsigned char * p) {
 //
 // For `PEEK_L*`, do a byteswap on big endian platforms.
 
-static inline U16 PEEK_L16(unsigned char * p) {
+static inline U16 PEEK_L16(char * p) {
   U16 x;
   memcpy(&x, p, sizeof(U16));
   return x;
 }
 
-static inline U32 PEEK_L32(unsigned char * p) {
+static inline U32 PEEK_L32(char * p) {
   U32 x;
   memcpy(&x, p, sizeof(U32));
   return x;
 }
 
-static inline U64 PEEK_L64(unsigned char * p) {
+static inline U64 PEEK_L64(char * p) {
   U64 x;
   memcpy(&x, p, sizeof(U64));
   return x;
+}
+
+// TODO:
+//
+// For `POKE_L*`, do a byteswap on big endian platforms.
+
+static inline void POKE_L16(char * p, U16 x) {
+  memcpy(p, &x, sizeof(U16));
+}
+
+static inline void POKE_L32(char * p, U32 x) {
+  memcpy(p, &x, sizeof(U32));
+}
+
+static inline void POKE_L64(char * p, U64 x) {
+  memcpy(p, &x, sizeof(U64));
 }
 
 static inline int clz64(U64 x) {

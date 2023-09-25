@@ -18,6 +18,7 @@ CFLAGS = \
 	-Wno-gnu-statement-expression-from-macro-expansion \
 	-Wno-missing-prototypes \
 	-Wno-pre-c2x-compat \
+	-Wno-used-but-marked-unused \
 	-Wno-shadow \
 	-Wno-shift-op-parentheses \
 	-Wno-unsafe-buffer-usage \
@@ -30,5 +31,11 @@ CFLAGS = \
 clean:
 	rm -f out/*
 
-out/fun: src/fun.c
-	clang -o $@ $< $(CFLAGS) -DNDEBUG
+out/fun: src/fun.c src/prelude.h out/bvm.o out/rts.o
+	clang -o $@ $< out/bvm.o out/rts.o $(CFLAGS) -DNDEBUG
+
+out/bvm.o: src/bvm.c src/bvm.h src/prelude.h
+	clang -c -o $@ $< $(CFLAGS) -DNDEBUG
+
+out/rts.o: src/rts.c src/rts.h src/prelude.h
+	clang -c -o $@ $< $(CFLAGS) -DNDEBUG
