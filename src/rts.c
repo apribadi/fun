@@ -3,7 +3,7 @@
 
 __attribute__((noinline))
 noreturn void RTS_panic(char * message) {
-  fprintf(stderr, "%s", message);
+  fprintf(stderr, "panic: %s", message);
   abort();
 }
 

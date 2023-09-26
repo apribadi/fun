@@ -114,6 +114,14 @@ static inline U64 PEEK_L64(char * p) {
   return x;
 }
 
+static inline void POKE_PTR(char * p, void * x) {
+  memcpy(p, &x, sizeof(void *));
+}
+
+static inline void POKE_U64(char * p, U64 x) {
+  memcpy(p, &x, sizeof(U64));
+}
+
 // TODO:
 //
 // For `POKE_L*`, do a byteswap on big endian platforms.
@@ -128,6 +136,63 @@ static inline void POKE_L32(char * p, U32 x) {
 
 static inline void POKE_L64(char * p, U64 x) {
   memcpy(p, &x, sizeof(U64));
+}
+
+static inline U16 H0(U64 x) {
+  return (U16) x;
+}
+
+static inline U16 H1(U64 x) {
+  return (U16) (x >> 16);
+}
+
+static inline U16 H2(U64 x) {
+  return (U16) (x >> 32);
+}
+
+static inline U16 H3(U64 x) {
+  return (U16) (x >> 48);
+}
+
+static inline U32 W0(U64 x) {
+  return (U32) x;
+}
+
+static inline U32 W1(U64 x) {
+  return (U32) (x >> 32);
+}
+
+static inline U64 HHHH(U16 a, U16 b, U16 c, U16 d) {
+  return
+    ( (U64) a
+    | (U64) ((U64) b << 16)
+    | (U64) ((U64) c << 32)
+    | (U64) ((U64) d << 48)
+    );
+}
+
+static inline U64 HHW_(U16 a, U16 b, U32 c) {
+  return
+    ( (U64) a
+    | (U64) ((U64) b << 16)
+    | (U64) ((U64) c << 32)
+    );
+}
+
+static inline U64 H___(U16 a) {
+  return HHHH(a, 0, 0, 0);
+}
+
+static inline U64 HH__(U16 a, U16 b) {
+  return HHHH(a, b, 0, 0);
+}
+
+static inline U64 HHH_(U16 a, U16 b, U16 c) {
+  return HHHH(a, b, c, 0);
+}
+
+static inline U64 H_W_(U16 a, U32 b) {
+  return HHW_(a, 0, b);
 }
 
 static inline int clz64(U64 x) {

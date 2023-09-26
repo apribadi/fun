@@ -3,12 +3,11 @@
 #include "code_bvm.h"
 
 int main(int, char **) {
-  char code[1024];
+  U64 code[1024];
 
   struct Bvm * vm;
 
-  POKE_L16(&code[0], BVM_OP_ABORT);
-  POKE_L32(&code[2], 1);
+  code[0] = H_W_(BVM_OP_ABORT, 1);
 
   BVM_init(&vm);
   BVM_exec(vm, code);
