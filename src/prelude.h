@@ -4,6 +4,7 @@
 #include <inttypes.h>
 #include <math.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,10 +12,12 @@
 #include <string.h>
 
 #ifdef NDEBUG
-#define ASSERT(X) do { (void) sizeof(X); } while (0)
+#define DEBUG_ASSERT(X) do { (void) sizeof(X); } while (0)
 #else
-#define ASSERT(X) assert(X)
+#define DEBUG_ASSERT(X) assert(X)
 #endif
+
+#define STATIC_ASSERT(X) static_assert(X)
 
 typedef bool Bool;
 typedef float F32;
@@ -29,20 +32,21 @@ typedef uint16_t U16;
 typedef uint32_t U32;
 typedef uint64_t U64;
 typedef __uint128_t U128;
+// typedef ptrdiff_t Int;
 
-static_assert(sizeof(Bool) == 1);
-static_assert(sizeof(F32) == 4);
-static_assert(sizeof(F64) == 8);
-static_assert(sizeof(S8) == 1);
-static_assert(sizeof(S16) == 2);
-static_assert(sizeof(S32) == 4);
-static_assert(sizeof(S64) == 8);
-static_assert(sizeof(S128) == 16);
-static_assert(sizeof(U8) == 1);
-static_assert(sizeof(U16) == 2);
-static_assert(sizeof(U32) == 4);
-static_assert(sizeof(U64) == 8);
-static_assert(sizeof(U128) == 16);
+STATIC_ASSERT(sizeof(Bool) == 1);
+STATIC_ASSERT(sizeof(F32) == 4);
+STATIC_ASSERT(sizeof(F64) == 8);
+STATIC_ASSERT(sizeof(S8) == 1);
+STATIC_ASSERT(sizeof(S16) == 2);
+STATIC_ASSERT(sizeof(S32) == 4);
+STATIC_ASSERT(sizeof(S64) == 8);
+STATIC_ASSERT(sizeof(S128) == 16);
+STATIC_ASSERT(sizeof(U8) == 1);
+STATIC_ASSERT(sizeof(U16) == 2);
+STATIC_ASSERT(sizeof(U32) == 4);
+STATIC_ASSERT(sizeof(U64) == 8);
+STATIC_ASSERT(sizeof(U128) == 16);
 
 static inline F32 PEEK_F32(char * p) {
   F32 x;
@@ -114,14 +118,6 @@ static inline U64 PEEK_L64(char * p) {
   return x;
 }
 
-static inline void POKE_PTR(char * p, void * x) {
-  memcpy(p, &x, sizeof(void *));
-}
-
-static inline void POKE_U64(char * p, U64 x) {
-  memcpy(p, &x, sizeof(U64));
-}
-
 // TODO:
 //
 // For `POKE_L*`, do a byteswap on big endian platforms.
@@ -136,6 +132,22 @@ static inline void POKE_L32(char * p, U32 x) {
 
 static inline void POKE_L64(char * p, U64 x) {
   memcpy(p, &x, sizeof(U64));
+}
+
+static inline U8 B0(U64 x) {
+  return (U8) x;
+}
+
+static inline U8 B1(U64 x) {
+  return (U8) (x >> 8);
+}
+
+static inline U8 B2(U64 x) {
+  return (U8) (x >> 16);
+}
+
+static inline U8 B3(U64 x) {
+  return (U8) (x >> 24);
 }
 
 static inline U16 H0(U64 x) {
@@ -160,6 +172,15 @@ static inline U32 W0(U64 x) {
 
 static inline U32 W1(U64 x) {
   return (U32) (x >> 32);
+}
+
+static inline U32 BBBB(U8 a, U8 b, U8 c, U8 d) {
+  return (
+      a
+    | (U32) b << 8
+    | (U32) c << 16
+    | (U32) d << 24
+  );
 }
 
 static inline U64 HHHH(U16 a, U16 b, U16 c, U16 d) {

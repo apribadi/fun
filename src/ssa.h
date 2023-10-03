@@ -1,12 +1,22 @@
-typedef enum SSA_OpCode : U16 {
+typedef enum SSA_Code : U16 {
+  SSA_CALL,     // n_args U16, n_konts U16, disp U32, arg_0 U16, ..., kont_0 U32, ...
+  SSA_FUNC,     // n_args U16, n_konts U16, type_0 U16, ...
+  SSA_GOTO,     // n_args U16, disp U32, arg_0 U16, ...
+  SSA_INST_11_, // prim U16, arg_0 U16
+  SSA_INST_1_0, // prim U16, arg_0 U16
+  SSA_INST_1_2, // prim U16, arg_0 U16, disp_0 U32, disp_1 U32
+  SSA_INST_20_, // prim U16, arg_0 U16, arg_1 U16
+  SSA_INST_21_, // prim U16, arg_0 U16, arg_1 U16
+  SSA_INST_2_2, // prim U16, arg_0 U16, arg_1 U16, disp_0 U32, disp_1 U32
+  SSA_INST_30_, // prim U16, arg_0 U16, arg_1 U16, arg_2 U16
+  SSA_INST_31_, // prim U16, arg_0 U16, arg_1 U16, arg_2 U16
+  SSA_LABEL,    // n_args U16, type_0 U16, ...
+  SSA_RETURN,   // n_args U16, kont_index U16, arg_0 U16, ...
+  SSA_TAIL      // n_args U16, disp U32, arg_0 U16, ...
+} SSA_Code;
+
+typedef enum SSA_Inst : U16 {
   SSA_OP_ABORT,
-  SSA_OP_CALL,
-  SSA_OP_CALL_INDIRECT,
-  SSA_OP_CALL_RETURN,
-  SSA_OP_CALL_RETURN_INDIRECT,
-  SSA_OP_CASE,
-  SSA_OP_CONTINUE,
-  SSA_OP_FUNCTION,
   SSA_OP_GOTO,
   SSA_OP_IF,
   SSA_OP_LABEL,
@@ -113,7 +123,7 @@ typedef enum SSA_OpCode : U16 {
   SSA_OP_I64_TO_I5,
   SSA_OP_I64_TO_I6,
   SSA_OP_COUNT,
-} SSA_OpCode;
+} SSA_Code;
 
 typedef enum SSA_TyCode : U16 {
   SSA_TY_BOOL,

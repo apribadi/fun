@@ -4,4 +4,4 @@ void BVM_init(struct Bvm **);
 
 void BVM_drop(struct Bvm **);
 
-void BVM_exec(struct Bvm *, U64 *);
+void BVM_exec(struct Bvm *, U32 *);

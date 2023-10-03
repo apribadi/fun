@@ -1,13 +1,13 @@
 #include "prelude.h"
 #include "bvm.h"
-#include "code_bvm.h"
+#include "isa_bvm.h"
 
 int main(int, char **) {
-  U64 code[1024];
+  U32 code[1024];
 
   struct Bvm * vm;
 
-  code[0] = H_W_(BVM_OP_ABORT, 1);
+  code[0] = BBBB(BVM_OP_ABORT, 0, 1, 0);
 
   BVM_init(&vm);
   BVM_exec(vm, code);
