@@ -2,7 +2,7 @@
 #include "rts.h"
 
 __attribute__((noinline))
-noreturn void RTS_panic(char * message) {
+noreturn void RTS_panic(char const * message) {
   fprintf(stderr, "panic: %s", message);
   abort();
 }

@@ -19,7 +19,6 @@
 
 #define STATIC_ASSERT(X) static_assert(X)
 
-typedef bool Bool;
 typedef float F32;
 typedef double F64;
 typedef int8_t S8;
@@ -32,9 +31,8 @@ typedef uint16_t U16;
 typedef uint32_t U32;
 typedef uint64_t U64;
 typedef __uint128_t U128;
-// typedef ptrdiff_t Int;
+typedef ptrdiff_t Int;
 
-STATIC_ASSERT(sizeof(Bool) == 1);
 STATIC_ASSERT(sizeof(F32) == 4);
 STATIC_ASSERT(sizeof(F64) == 8);
 STATIC_ASSERT(sizeof(S8) == 1);
@@ -216,11 +214,11 @@ static inline U64 H_W_(U16 a, U32 b) {
   return HHW_(a, 0, b);
 }
 
-static inline int clz64(U64 x) {
+static inline Int clz64(U64 x) {
   return x ? __builtin_clzll(x) : 64;
 }
 
-static inline int ctz64(U64 x) {
+static inline Int ctz64(U64 x) {
   return x ? __builtin_ctzll(x) : 64;
 }
 
@@ -228,22 +226,22 @@ static inline U64 rev64(U64 x) {
   return __builtin_bswap64(x);
 }
 
-static inline U64 rol64(U64 x, int k) {
+static inline U64 rol64(U64 x, Int k) {
   return x << (k & 0x3f) | x >> (- (unsigned int) k & 0x3f);
 }
 
-static inline U64 ror64(U64 x, int k) {
+static inline U64 ror64(U64 x, Int k) {
   return x >> (k & 0x3f) | x << (- (unsigned int) k & 0x3f);
 }
 
-static inline U64 shl64(U64 x, int k) {
+static inline U64 shl64(U64 x, Int k) {
   return x << (k & 0x3f);
 }
 
-static inline S64 asr64(S64 x, int k) {
+static inline S64 asr64(S64 x, Int k) {
   return x >> (k & 0x3f);
 }
 
-static inline U64 lsr64(U64 x, int k) {
+static inline U64 lsr64(U64 x, Int k) {
   return x >> (k & 0x3f);
 }

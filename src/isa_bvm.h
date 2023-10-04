@@ -29,14 +29,25 @@
 //
 // don't want to leak reference type representations.
 
-// TODO: define canonical representations of F32 and F64
+// | Byte 0      | Byte 1      | Byte 2      | Byte 3      |
+// |             |             |             |             |
+// | OP_ARGS     | # args      | reg start   |             |
+// | OP_CALL     | signed displacement (24 bit)            |
+// | OP_EXIT     | exit code   |             |             |
+// | OP_FUNC     | # args      | frame size (16 bit)       |
+// | OP_JUMP     | signed displacement (24 bit)            |
+// | OP_RETN     | kont index  |             |             |
+// | OP_TAIL     | signed displacement (24 bit)            |
+// |             |             |             |             |
+// | OP_MOVE     | src         | dst         |             |
+// | OP_SPILL    | src         | dst (16 bit)              |
+// | OP_RELOAD   | src (16 bit)              | dst         |
 //
-// eliminate bool type
-
+//
 typedef enum BVM_OpCode : U8 {
-  BVM_OP_ABORT,
   BVM_OP_CALL,
   BVM_OP_DEBUG_PRINT,
+  BVM_OP_EXIT,
   BVM_OP_FRAME,
   BVM_OP_GOTO,
   BVM_OP_NOP,

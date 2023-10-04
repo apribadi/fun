@@ -1,4 +1,4 @@
-noreturn void RTS_panic(char *);
+noreturn void RTS_panic(char const *);
 
 inline void * RTS_alloc(size_t n) {
   void * p = malloc(n);

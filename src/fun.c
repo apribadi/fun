@@ -7,7 +7,7 @@ int main(int, char **) {
 
   struct Bvm * vm;
 
-  code[0] = BBBB(BVM_OP_ABORT, 0, 1, 0);
+  code[0] = BBBB(BVM_OP_EXIT, 0, 1, 0);
 
   BVM_init(&vm);
   BVM_exec(vm, code);
