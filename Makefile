@@ -30,11 +30,11 @@ CFLAGS = \
 clean:
 	rm -f out/*
 
-out/fun: src/fun.c src/prelude.h src/isa_bvm.h out/bvm.o out/rts.o
-	clang -o $@ $< out/bvm.o out/rts.o $(CFLAGS) -DNDEBUG
+out/fun: src/fun.c src/prelude.h src/isa_vm.h out/vm.o out/rt.o
+	clang -o $@ $< out/vm.o out/rt.o $(CFLAGS) -DNDEBUG
 
-out/bvm.o: src/bvm.c src/bvm.h src/isa_bvm.h src/prelude.h
+out/vm.o: src/vm.c src/vm.h src/isa_vm.h src/prelude.h
 	clang -c -o $@ $< $(CFLAGS) -DNDEBUG
 
-out/rts.o: src/rts.c src/rts.h src/prelude.h
+out/rt.o: src/rt.c src/rt.h src/prelude.h
 	clang -c -o $@ $< $(CFLAGS) -DNDEBUG

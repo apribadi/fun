@@ -181,6 +181,33 @@ static inline U32 BBBB(U8 a, U8 b, U8 c, U8 d) {
   );
 }
 
+static inline U32 BBH_(U8 a, U8 b, U16 c) {
+  return (
+      a
+    | (U32) b << 8
+    | (U32) c << 16
+  );
+}
+
+static inline U32 BX__(U8 a, U32 b) {
+  return (
+      a
+    | (U32) b << 8
+  );
+}
+
+static inline U32 BB__(U8 a, U8 b) {
+  return BBBB(a, b, 0, 0);
+}
+
+static inline U32 BBB_(U8 a, U8 b, U8 c) {
+  return BBBB(a, b, c, 0);
+}
+
+static inline U32 B_H_(U8 a, U16 b) {
+  return BBH_(a, 0, b);
+}
+
 static inline U64 HHHH(U16 a, U16 b, U16 c, U16 d) {
   return
     ( (U64) a

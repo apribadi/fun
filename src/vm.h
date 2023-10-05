@@ -1,7 +1,7 @@
-struct Vm;
+struct VM_State;
 
-void VM_init(struct Vm **);
+void VM_init(struct VM_State **);
 
-void VM_drop(struct Vm **);
+void VM_drop(struct VM_State **);
 
-void VM_exec(struct Vm *, U32 *);
+void VM_exec(struct VM_State *, U32 *);
