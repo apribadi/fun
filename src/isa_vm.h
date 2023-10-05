@@ -54,6 +54,7 @@ typedef enum VM_OpCode : U8 {
   VM_OP_I32_ADD,
   VM_OP_I32_CMP_LE_U,
   VM_OP_I32_IMM_CONST,
+  VM_OP_I32_SUB,
   VM_OP_I64_ADD,
   VM_OP_COUNT,
 } VM_OpCode;

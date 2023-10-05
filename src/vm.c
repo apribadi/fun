@@ -190,6 +190,14 @@ static ExitCode op_i32_imm_const(VM_State * ep, U32 * ip, U64 * fp, U64 * sp, U6
   return dispatch(ep, ip + 1, fp, sp, lp);
 }
 
+static ExitCode op_i32_sub(VM_State * ep, U32 * ip, U64 * fp, U64 * sp, U64 * lp, U32 inst) {
+  U32 x = get_reg_u32(fp + B1(inst));
+  U32 y = get_reg_u32(fp + B2(inst));
+  U32 z = x - y;
+  set_reg_u32(fp + B3(inst), z);
+  return dispatch(ep, ip + 1, fp, sp, lp);
+}
+
 static ExitCode op_i64_add(VM_State * ep, U32 * ip, U64 * fp, U64 * sp, U64 * lp, U32 inst) {
   U64 x = get_reg_u64(fp + B1(inst));
   U64 y = get_reg_u64(fp + B2(inst));
@@ -198,33 +206,30 @@ static ExitCode op_i64_add(VM_State * ep, U32 * ip, U64 * fp, U64 * sp, U64 * lp
   return dispatch(ep, ip + 1, fp, sp, lp);
 }
 
+static VM_State STATE = {
+  .dispatch = {
+    [VM_OP_CALL] = op_call,
+    [VM_OP_EXIT] = op_exit,
+    [VM_OP_FUNCTION] = op_function,
+    [VM_OP_JUMP] = op_jump,
+    [VM_OP_MOVE] = op_move,
+    [VM_OP_RETURN] = op_return,
+    [VM_OP_SHOW] = op_show,
+    [VM_OP_F32_ADD] = op_f32_add,
+    [VM_OP_F64_ADD] = op_f64_add,
+    [VM_OP_I32_ADD] = op_i32_add,
+    [VM_OP_I32_CMP_LE_U] = op_i32_cmp_le_u,
+    [VM_OP_I32_IMM_CONST] = op_i32_imm_const,
+    [VM_OP_I32_SUB] = op_i32_sub,
+    [VM_OP_I64_ADD] = op_i64_add,
+  },
+};
+
 void VM_init(struct VM_State ** p) {
-  VM_State * ep = RT_alloc(sizeof(VM_State));
-
-  * ep = (VM_State) {
-    .dispatch = {
-      [VM_OP_CALL] = op_call,
-      [VM_OP_EXIT] = op_exit,
-      [VM_OP_FUNCTION] = op_function,
-      [VM_OP_JUMP] = op_jump,
-      [VM_OP_MOVE] = op_move,
-      [VM_OP_RETURN] = op_return,
-      [VM_OP_SHOW] = op_show,
-      [VM_OP_F32_ADD] = op_f32_add,
-      [VM_OP_F64_ADD] = op_f64_add,
-      [VM_OP_I32_ADD] = op_i32_add,
-      [VM_OP_I32_CMP_LE_U] = op_i32_cmp_le_u,
-      [VM_OP_I32_IMM_CONST] = op_i32_imm_const,
-      [VM_OP_I64_ADD] = op_i64_add,
-    },
-  };
-
-  * p = ep;
+  * p = &STATE;
 }
 
 void VM_drop(struct VM_State ** p) {
-  RT_free(* p);
-
   * p = nullptr;
 }
 
