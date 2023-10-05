@@ -1,17 +1,17 @@
 #include "prelude.h"
-#include "bvm.h"
-#include "isa_bvm.h"
+#include "vm.h"
+#include "isa_vm.h"
 
 int main(int, char **) {
   U32 code[1024];
 
-  struct Bvm * vm;
+  struct Vm * vm;
 
-  code[0] = BBBB(BVM_OP_EXIT, 0, 1, 0);
+  code[0] = BBBB(VM_OP_EXIT, 0, 1, 0);
 
-  BVM_init(&vm);
-  BVM_exec(vm, code);
-  BVM_drop(&vm);
+  VM_init(&vm);
+  VM_exec(vm, code);
+  VM_drop(&vm);
 
   return 0;
 }
