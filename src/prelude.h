@@ -11,6 +11,10 @@
 #include <stdnoreturn.h>
 #include <string.h>
 
+#if __BYTE_ORDER__ != __ORDER_LITTLE_ENDIAN__
+#error "platforms that are not little-endian are not supported"
+#endif
+
 #ifdef NDEBUG
 #define DEBUG_ASSERT(X) do { (void) sizeof(X); } while (0)
 #else
@@ -45,6 +49,13 @@ STATIC_ASSERT(sizeof(U16) == 2);
 STATIC_ASSERT(sizeof(U32) == 4);
 STATIC_ASSERT(sizeof(U64) == 8);
 STATIC_ASSERT(sizeof(U128) == 16);
+
+static inline U16 pop_le16(unsigned char ** p) {
+  U16 x;
+  memcpy(&x, * p, sizeof(U16));
+  * p = * p + sizeof(U16);
+  return x;
+}
 
 static inline F32 PEEK_F32(char * p) {
   F32 x;
@@ -132,6 +143,38 @@ static inline void POKE_L64(char * p, U64 x) {
   memcpy(p, &x, sizeof(U64));
 }
 
+static inline Int clz64(U64 x) {
+  return x ? __builtin_clzll(x) : 64;
+}
+
+static inline Int ctz64(U64 x) {
+  return x ? __builtin_ctzll(x) : 64;
+}
+
+static inline U64 rev64(U64 x) {
+  return __builtin_bswap64(x);
+}
+
+static inline U64 rol64(U64 x, Int k) {
+  return x << (k & 0x3f) | x >> (- (unsigned int) k & 0x3f);
+}
+
+static inline U64 ror64(U64 x, Int k) {
+  return x >> (k & 0x3f) | x << (- (unsigned int) k & 0x3f);
+}
+
+static inline U64 shl64(U64 x, Int k) {
+  return x << (k & 0x3f);
+}
+
+static inline S64 asr64(S64 x, Int k) {
+  return x >> (k & 0x3f);
+}
+
+static inline U64 lsr64(U64 x, Int k) {
+  return x >> (k & 0x3f);
+}
+
 static inline U8 B0(U64 x) {
   return (U8) x;
 }
@@ -174,7 +217,7 @@ static inline U32 W1(U64 x) {
 
 static inline U32 BBBB(U8 a, U8 b, U8 c, U8 d) {
   return (
-      a
+      (U32) a
     | (U32) b << 8
     | (U32) c << 16
     | (U32) d << 24
@@ -183,7 +226,7 @@ static inline U32 BBBB(U8 a, U8 b, U8 c, U8 d) {
 
 static inline U32 BBH_(U8 a, U8 b, U16 c) {
   return (
-      a
+      (U32) a
     | (U32) b << 8
     | (U32) c << 16
   );
@@ -191,7 +234,7 @@ static inline U32 BBH_(U8 a, U8 b, U16 c) {
 
 static inline U32 BX__(U8 a, U32 b) {
   return (
-      a
+      (U32) a
     | (U32) b << 8
   );
 }
@@ -239,36 +282,4 @@ static inline U64 HHH_(U16 a, U16 b, U16 c) {
 
 static inline U64 H_W_(U16 a, U32 b) {
   return HHW_(a, 0, b);
-}
-
-static inline Int clz64(U64 x) {
-  return x ? __builtin_clzll(x) : 64;
-}
-
-static inline Int ctz64(U64 x) {
-  return x ? __builtin_ctzll(x) : 64;
-}
-
-static inline U64 rev64(U64 x) {
-  return __builtin_bswap64(x);
-}
-
-static inline U64 rol64(U64 x, Int k) {
-  return x << (k & 0x3f) | x >> (- (unsigned int) k & 0x3f);
-}
-
-static inline U64 ror64(U64 x, Int k) {
-  return x >> (k & 0x3f) | x << (- (unsigned int) k & 0x3f);
-}
-
-static inline U64 shl64(U64 x, Int k) {
-  return x << (k & 0x3f);
-}
-
-static inline S64 asr64(S64 x, Int k) {
-  return x >> (k & 0x3f);
-}
-
-static inline U64 lsr64(U64 x, Int k) {
-  return x >> (k & 0x3f);
 }

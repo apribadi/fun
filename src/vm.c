@@ -115,9 +115,9 @@ static ExitCode op_exit(VM_State * ep, U32 * ip, U64 * fp, U64 * sp, U64 * lp, U
 }
 
 static ExitCode op_function(VM_State * ep, U32 * ip, U64 * fp, U64 * sp, U64 * lp, U32 inst) {
-  if (! (258 <= lp - sp)) return EXIT_CODE_STACK_OVERFLOW;
-
   U16 k = H1(inst);
+
+  if (! (k + 258 <= lp - sp)) return EXIT_CODE_STACK_OVERFLOW;
 
   return dispatch(ep, ip + 1, fp, sp + k, lp);
 }

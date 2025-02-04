@@ -30,6 +30,9 @@ CFLAGS = \
 clean:
 	rm -f out/*
 
+out/foo-expanded: src/foo.c src/prelude.h
+	clang -o $@ $< -E
+
 out/fun: src/fun.c src/prelude.h src/isa_vm.h out/vm.o out/rt.o
 	clang -o $@ $< out/vm.o out/rt.o $(CFLAGS) -DNDEBUG
 
